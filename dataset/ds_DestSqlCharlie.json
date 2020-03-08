@@ -1,0 +1,25 @@
+{
+	"name": "ds_DestSqlCharlie",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_AzureSqlCharlie",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"Tablename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "charlieFinal",
+			"table": {
+				"value": "@dataset().Tablename",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

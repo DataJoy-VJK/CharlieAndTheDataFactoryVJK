@@ -1,0 +1,12 @@
+{
+	"name": "ls_AzureSqlCharlie",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "integrated security=False;encrypt=True;connection timeout=30;data source=sqlservervjk.database.windows.net;initial catalog=AzureDbVJK;user id=VanessaEHL",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkNIQVJMSUVBTkRUSEVEQVRBRkFDVE9SWVZKS19mOGMzMDM0NC1kMTc0LTQyYzUtYTFjZS02NGNlNzcwODYzZTEiDQp9"
+		}
+	}
+}

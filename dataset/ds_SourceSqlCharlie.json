@@ -1,0 +1,13 @@
+{
+	"name": "ds_SourceSqlCharlie",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_AzureSqlCharlie",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

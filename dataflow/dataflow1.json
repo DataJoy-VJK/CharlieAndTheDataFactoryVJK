@@ -1,0 +1,32 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_SourceSqlCharlie",
+						"type": "DatasetReference"
+					},
+					"name": "CharlieCharacters"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_DestSqlCharlie",
+						"type": "DatasetReference"
+					},
+					"name": "DestCharlieCharacters"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AddCharacterNameColumn"
+				}
+			],
+			"script": "source(output(\n\t\tCharacterId as integer,\n\t\tCharacterFirstName as string,\n\t\tCharacterLastName as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'SELECT * FROM charlie.characters',\n\tformat: 'query') ~> CharlieCharacters\nCharlieCharacters derive(CharacterName = add(CharacterFirstName, iifNull(add(' ', CharacterLastName), ''))) ~> AddCharacterNameColumn\nAddCharacterNameColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DestCharlieCharacters"
+		}
+	}
+}
