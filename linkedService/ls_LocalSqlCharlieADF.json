@@ -1,0 +1,17 @@
+{
+	"name": "ls_LocalSqlCharlieADF",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "Connection to local SQL CharlieADF database",
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=DESKTOP-AHT1143;initial catalog=CharlieADF;user id=CharlieLogin",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJhNzI1ODQ1Ny1hZWExLTRlN2ItOWU0MC0zY2NkZTg2ODRmODYiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "MySelfHostedIR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
