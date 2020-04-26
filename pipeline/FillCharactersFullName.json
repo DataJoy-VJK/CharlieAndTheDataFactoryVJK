@@ -1,9 +1,9 @@
 {
-	"name": "CopyCharlieData_WithDataFlow",
+	"name": "FillCharactersFullName",
 	"properties": {
 		"activities": [
 			{
-				"name": "dataflow1",
+				"name": "MDF_CreateFullNames",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow1",
+						"referenceName": "CreateFullNames",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"DestCharlieCharacters": {

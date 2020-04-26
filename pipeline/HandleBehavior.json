@@ -1,0 +1,63 @@
+{
+	"name": "HandleBehavior",
+	"properties": {
+		"activities": [
+			{
+				"name": "SET_Behavior",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Behavior",
+					"value": {
+						"value": "@if(child.Name = \"Charlie\", \"Good\", \"Bad\")",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "IF_Good",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "SET_Behavior",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"ifFalseActivities": [
+						{
+							"name": "EP_SendHome",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitOnCompletion": true
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "EP_GiveFactory",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitOnCompletion": true
+							}
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"Behavior": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
