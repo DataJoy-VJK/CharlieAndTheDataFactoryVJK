@@ -17,6 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT CharacterName FROM charlieFinal.Characters\nWHERE AgeCategory = 'Child'",
 						"queryTimeout": "02:00:00"
 					},
 					"dataset": {
