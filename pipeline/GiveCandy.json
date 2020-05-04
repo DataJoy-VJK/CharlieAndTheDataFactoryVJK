@@ -22,7 +22,8 @@
 					"dataset": {
 						"referenceName": "ds_SourceSqlCharlie",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
 			},
 			{
@@ -38,6 +39,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@activity('LKP_Children').output.value",
+						"type": "Expression"
+					},
 					"activities": [
 						{
 							"name": "EXEC_GiveCandy",
