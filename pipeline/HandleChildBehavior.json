@@ -61,6 +61,10 @@
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
+								"pipeline": {
+									"referenceName": "GiveGoodChildTheFactory",
+									"type": "PipelineReference"
+								},
 								"waitOnCompletion": true
 							}
 						}
