@@ -13,7 +13,17 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00"
+					},
+					"dataset": {
+						"referenceName": "ds_SourceSqlCharlie",
+						"type": "DatasetReference"
+					}
+				}
 			},
 			{
 				"name": "FE_Child",
