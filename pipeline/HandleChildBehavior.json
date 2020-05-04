@@ -1,5 +1,5 @@
 {
-	"name": "HandleBehavior",
+	"name": "HandleChildBehavior",
 	"properties": {
 		"activities": [
 			{
@@ -30,12 +30,23 @@
 				"typeProperties": {
 					"ifFalseActivities": [
 						{
-							"name": "EP_SendHome",
-							"type": "ExecutePipeline",
+							"name": "SP_SendHome",
+							"type": "SqlServerStoredProcedure",
 							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
-								"waitOnCompletion": true
+								"storedProcedureName": "[dbo].[SendBadChildHome]"
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_AzureSqlCharlie",
+								"type": "LinkedServiceReference"
 							}
 						}
 					],

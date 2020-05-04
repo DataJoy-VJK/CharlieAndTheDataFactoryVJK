@@ -13,7 +13,14 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[GiveGoodChildTheFactory]"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_AzureSqlCharlie",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"annotations": []
