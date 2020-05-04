@@ -10,7 +10,7 @@
 				"typeProperties": {
 					"variableName": "Behavior",
 					"value": {
-						"value": "@if(pipeline().parameters.ChildName = \"Charlie Bucket\", \"Good\", \"Bad\")",
+						"value": "@if(equals(pipeline().parameters.ChildName, 'Charlie Bucket'), 'Good', 'Bad')",
 						"type": "Expression"
 					}
 				}
@@ -28,6 +28,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"expression": {
+						"value": "@equals(variables('Behavior'), 'Good')",
+						"type": "Expression"
+					},
 					"ifFalseActivities": [
 						{
 							"name": "SP_SendHome",
