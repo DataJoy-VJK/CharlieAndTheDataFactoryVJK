@@ -10,7 +10,7 @@
 				"typeProperties": {
 					"variableName": "Behavior",
 					"value": {
-						"value": "@if(child.Name = \"Charlie\", \"Good\", \"Bad\")",
+						"value": "@if(pipeline().parameters.ChildName = \"Charlie Bucket\", \"Good\", \"Bad\")",
 						"type": "Expression"
 					}
 				}
@@ -64,6 +64,11 @@
 				}
 			}
 		],
+		"parameters": {
+			"ChildName": {
+				"type": "string"
+			}
+		},
 		"variables": {
 			"Behavior": {
 				"type": "String"
