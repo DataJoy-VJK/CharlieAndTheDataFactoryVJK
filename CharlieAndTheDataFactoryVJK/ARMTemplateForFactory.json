@@ -186,7 +186,9 @@
 								"queryTimeout": "02:00:00"
 							},
 							"sink": {
-								"type": "AzureSqlSink"
+								"type": "AzureSqlSink",
+								"preCopyScript": "TRUNCATE TABLE charlieFinal.Characters",
+								"disableMetricsCollection": false
 							},
 							"enableStaging": false
 						},
@@ -226,7 +228,9 @@
 								"queryTimeout": "02:00:00"
 							},
 							"sink": {
-								"type": "AzureSqlSink"
+								"type": "AzureSqlSink",
+								"preCopyScript": "TRUNCATE TABLE charlieFinal.Versions",
+								"disableMetricsCollection": false
 							},
 							"enableStaging": false
 						},
