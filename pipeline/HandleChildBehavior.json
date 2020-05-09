@@ -10,7 +10,7 @@
 				"typeProperties": {
 					"variableName": "Behavior",
 					"value": {
-						"value": "@if(equals(pipeline().parameters.ChildName, 'Charlie Bucket'), 'Good', 'Bad')",
+						"value": "@if(equals(pipeline().parameters.ChildName, 'Charlie'), 'Good', 'Bad')",
 						"type": "Expression"
 					}
 				}
