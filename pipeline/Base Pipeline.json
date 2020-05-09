@@ -1,0 +1,109 @@
+{
+	"name": "Base Pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "LogPipelineStart",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[LogPipelineStart]"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_AzureSqlCharlie",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "LogPipelineError",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "ReplaceWithActualPipelineActivies",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[LogPipelineError]"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_AzureSqlCharlie",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "LogPipelineSuccess",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "ReplaceWithActualPipelineActivies",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[LogPipelineSuccess]"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_AzureSqlCharlie",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "ReplaceWithActualPipelineActivies",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "LogPipelineStart",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[LogPipelineStart]"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_AzureSqlCharlie",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
