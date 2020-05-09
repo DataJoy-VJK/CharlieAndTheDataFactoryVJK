@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "CopyCharacters",
+				"name": "CopyActors",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -17,12 +17,12 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT * FROM charlie.Characters",
+						"sqlReaderQuery": "SELECT * FROM charlie.Actors",
 						"queryTimeout": "02:00:00"
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "TRUNCATE TABLE charlieFinal.Characters",
+						"preCopyScript": "TRUNCATE TABLE charlieFinal.Actors",
 						"disableMetricsCollection": false
 					},
 					"enableStaging": false
@@ -38,7 +38,7 @@
 						"referenceName": "ds_DestSqlCharlie",
 						"type": "DatasetReference",
 						"parameters": {
-							"Tablename": "Characters"
+							"Tablename": "Actors"
 						}
 					}
 				]
