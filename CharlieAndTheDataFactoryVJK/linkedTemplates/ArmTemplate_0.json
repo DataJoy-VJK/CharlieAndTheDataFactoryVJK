@@ -1,0 +1,540 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "CharlieAndTheDataFactoryVJK"
+		},
+		"ls_AzureSqlCharlie_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_AzureSqlCharlie'"
+		},
+		"ls_LocalSqlCharlieADF_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_LocalSqlCharlieADF'"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_AzureSqlCharlie')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_AzureSqlCharlie_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MySelfHostedIR')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/GiveGoodChildTheFactory')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SP_GiveFactory",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[GiveGoodChildTheFactory]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_AzureSqlCharlie",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_AzureSqlCharlie')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_DestSqlCharlie')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_AzureSqlCharlie",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"Tablename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "charlieFinal",
+					"table": {
+						"value": "@dataset().Tablename",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_AzureSqlCharlie')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_SourceSqlCharlie')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_AzureSqlCharlie",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_AzureSqlCharlie')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_LocalSqlCharlieADF')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Connection to local SQL CharlieADF database",
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_LocalSqlCharlieADF_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "MySelfHostedIR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/MySelfHostedIR')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Base Pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LogPipelineStart",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[LogPipelineStart]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_AzureSqlCharlie",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "LogPipelineError",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "ReplaceWithActualPipelineActivies",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[LogPipelineError]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_AzureSqlCharlie",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "LogPipelineSuccess",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "ReplaceWithActualPipelineActivies",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[LogPipelineSuccess]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_AzureSqlCharlie",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ReplaceWithActualPipelineActivies",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "LogPipelineStart",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[LogPipelineStart]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_AzureSqlCharlie",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "EmailCompletion",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "ReplaceWithActualPipelineActivies",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[LogPipelineStart]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_AzureSqlCharlie",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_AzureSqlCharlie')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HandleChildBehavior')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SET_Behavior",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Behavior",
+							"value": {
+								"value": "@if(equals(pipeline().parameters.ChildName, 'Charlie Bucket'), 'Good', 'Bad')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "IF_Good",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "SET_Behavior",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(variables('Behavior'), 'Good')",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "SP_SendHome",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[SendBadChildHome]"
+									},
+									"linkedServiceName": {
+										"referenceName": "ls_AzureSqlCharlie",
+										"type": "LinkedServiceReference"
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "EP_GiveFactory",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "GiveGoodChildTheFactory",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {}
+									}
+								}
+							]
+						}
+					}
+				],
+				"parameters": {
+					"ChildName": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"Behavior": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_AzureSqlCharlie')]",
+				"[concat(variables('factoryId'), '/pipelines/GiveGoodChildTheFactory')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CreateFullNames')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_SourceSqlCharlie",
+								"type": "DatasetReference"
+							},
+							"name": "CharlieCharacters"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_DestSqlCharlie",
+								"type": "DatasetReference"
+							},
+							"name": "DestCharlieCharacters"
+						}
+					],
+					"transformations": [
+						{
+							"name": "AddCharacterNameColumn"
+						}
+					],
+					"script": "source(output(\n\t\tCharacterId as integer,\n\t\tCharacterFirstName as string,\n\t\tCharacterLastName as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'SELECT * FROM charlie.characters',\n\tformat: 'query') ~> CharlieCharacters\nCharlieCharacters derive(CharacterName = add(CharacterFirstName, iifNull(add(' ', CharacterLastName), ''))) ~> AddCharacterNameColumn\nAddCharacterNameColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DestCharlieCharacters"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_SourceSqlCharlie')]",
+				"[concat(variables('factoryId'), '/datasets/ds_DestSqlCharlie')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FillCharactersFullName')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "MDF_CreateFullNames",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "CreateFullNames",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"CharlieCharacters": {},
+									"DestCharlieCharacters": {
+										"Tablename": "Characters"
+									}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							}
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/CreateFullNames')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/GiveCandy')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LKP_Children",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT CharacterName FROM charlieFinal.Characters\nWHERE AgeCategory = 'Child'",
+								"queryTimeout": "02:00:00"
+							},
+							"dataset": {
+								"referenceName": "ds_SourceSqlCharlie",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "FE_Child",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "LKP_Children",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('LKP_Children').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Replace with Execute SSIS package",
+									"description": "Name: EXEC Give Candy",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "FillCharactersFullName",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {}
+									}
+								}
+							]
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_SourceSqlCharlie')]",
+				"[concat(variables('factoryId'), '/pipelines/FillCharactersFullName')]"
+			]
+		}
+	]
+}
