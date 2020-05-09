@@ -46,7 +46,7 @@
 					},
 					"activities": [
 						{
-							"name": "GiveCandy",
+							"name": "Replace with EXEC SSIS",
 							"type": "SqlServerStoredProcedure",
 							"dependsOn": [],
 							"policy": {
