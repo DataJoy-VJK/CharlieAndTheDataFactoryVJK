@@ -383,6 +383,87 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/GiveCandy')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LKP_Children",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT CharacterName FROM charlieFinal.Characters\nWHERE AgeCategory = 'Child'",
+								"queryTimeout": "02:00:00"
+							},
+							"dataset": {
+								"referenceName": "ds_SourceSqlCharlie",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "FE_Child",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "LKP_Children",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('LKP_Children').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "GiveCandy",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[GiveCandy]"
+									},
+									"linkedServiceName": {
+										"referenceName": "ls_AzureSqlCharlie",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_SourceSqlCharlie')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_AzureSqlCharlie')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/HandleChildBehavior')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -556,82 +637,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/CreateFullNames')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/GiveCandy')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "LKP_Children",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT CharacterName FROM charlieFinal.Characters\nWHERE AgeCategory = 'Child'",
-								"queryTimeout": "02:00:00"
-							},
-							"dataset": {
-								"referenceName": "ds_SourceSqlCharlie",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "FE_Child",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "LKP_Children",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('LKP_Children').output.value",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "Replace with Execute SSIS package",
-									"description": "Name: EXEC Give Candy",
-									"type": "ExecutePipeline",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"pipeline": {
-											"referenceName": "FillCharactersFullName",
-											"type": "PipelineReference"
-										},
-										"waitOnCompletion": true,
-										"parameters": {}
-									}
-								}
-							]
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_SourceSqlCharlie')]",
-				"[concat(variables('factoryId'), '/pipelines/FillCharactersFullName')]"
 			]
 		}
 	]

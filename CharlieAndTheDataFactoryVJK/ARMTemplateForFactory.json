@@ -354,18 +354,23 @@
 							},
 							"activities": [
 								{
-									"name": "Replace with Execute SSIS package",
-									"description": "Name: EXEC Give Candy",
-									"type": "ExecutePipeline",
+									"name": "GiveCandy",
+									"type": "SqlServerStoredProcedure",
 									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
 									"userProperties": [],
 									"typeProperties": {
-										"pipeline": {
-											"referenceName": "FillCharactersFullName",
-											"type": "PipelineReference"
-										},
-										"waitOnCompletion": true,
-										"parameters": {}
+										"storedProcedureName": "[[dbo].[GiveCandy]"
+									},
+									"linkedServiceName": {
+										"referenceName": "ls_AzureSqlCharlie",
+										"type": "LinkedServiceReference"
 									}
 								}
 							]
@@ -376,7 +381,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_SourceSqlCharlie')]",
-				"[concat(variables('factoryId'), '/pipelines/FillCharactersFullName')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_AzureSqlCharlie')]"
 			]
 		},
 		{
