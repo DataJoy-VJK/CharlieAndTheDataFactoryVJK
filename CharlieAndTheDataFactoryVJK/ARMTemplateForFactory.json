@@ -354,7 +354,7 @@
 							},
 							"activities": [
 								{
-									"name": "GiveCandy",
+									"name": "Replace with EXEC SSIS",
 									"type": "SqlServerStoredProcedure",
 									"dependsOn": [],
 									"policy": {
@@ -431,7 +431,7 @@
 						"typeProperties": {
 							"variableName": "Behavior",
 							"value": {
-								"value": "@if(equals(pipeline().parameters.ChildName, 'Charlie Bucket'), 'Good', 'Bad')",
+								"value": "@if(equals(pipeline().parameters.ChildName, 'Charlie'), 'Good', 'Bad')",
 								"type": "Expression"
 							}
 						}
