@@ -153,6 +153,39 @@
 							"referenceName": "ls_AzureSqlCharlie",
 							"type": "LinkedServiceReference"
 						}
+					},
+					{
+						"name": "EmailCompletionNO",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "LogPipelineError",
+								"dependencyConditions": [
+									"Completed"
+								]
+							},
+							{
+								"activity": "LogPipelineSuccess",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[LogPipelineStart]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_AzureSqlCharlie",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"annotations": []
