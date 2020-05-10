@@ -62,7 +62,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
-									"referenceName": "GiveGoodChildTheFactory",
+									"referenceName": "RewardGoodChildWithFactory",
 									"type": "PipelineReference"
 								},
 								"waitOnCompletion": true
