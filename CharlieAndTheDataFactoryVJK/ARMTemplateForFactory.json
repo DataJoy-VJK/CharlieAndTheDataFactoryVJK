@@ -162,7 +162,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/CopyCharactersAndVersions')]",
+			"name": "[concat(parameters('factoryName'), '/CopyActorsAndVersions')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -385,39 +385,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/GiveGoodChildTheFactory')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "SP_GiveFactory",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[GiveGoodChildTheFactory]"
-						},
-						"linkedServiceName": {
-							"referenceName": "ls_AzureSqlCharlie",
-							"type": "LinkedServiceReference"
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_AzureSqlCharlie')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/HandleChildBehavior')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -483,7 +450,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"pipeline": {
-											"referenceName": "GiveGoodChildTheFactory",
+											"referenceName": "RewardGoodChildWithFactory",
 											"type": "PipelineReference"
 										},
 										"waitOnCompletion": true,
@@ -508,7 +475,40 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_AzureSqlCharlie')]",
-				"[concat(variables('factoryId'), '/pipelines/GiveGoodChildTheFactory')]"
+				"[concat(variables('factoryId'), '/pipelines/RewardGoodChildWithFactory')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RewardGoodChildWithFactory')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SP_GiveFactory",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[GiveGoodChildTheFactory]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_AzureSqlCharlie",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_AzureSqlCharlie')]"
 			]
 		},
 		{
