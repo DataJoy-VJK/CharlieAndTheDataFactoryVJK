@@ -184,13 +184,13 @@
 							{
 								"activity": "LogPipelineError",
 								"dependencyConditions": [
-									"Completed"
+									"Succeeded"
 								]
 							},
 							{
 								"activity": "LogPipelineSuccess",
 								"dependencyConditions": [
-									"Completed"
+									"Succeeded"
 								]
 							}
 						],
