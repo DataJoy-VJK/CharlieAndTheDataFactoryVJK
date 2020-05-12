@@ -14,6 +14,10 @@
 		"ls_LocalSqlCharlieADF_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_LocalSqlCharlieADF'"
+		},
+		"trigger1_properties_HandleChildBehavior_parameters_ChildName": {
+			"type": "string",
+			"defaultValue": "Charlie"
 		}
 	},
 	"variables": {
@@ -637,6 +641,48 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_SourceSqlCharlie')]",
 				"[concat(variables('factoryId'), '/datasets/ds_DestSqlCharlie')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "HandleChildBehavior",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"ChildName": "[parameters('trigger1_properties_HandleChildBehavior_parameters_ChildName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2020-05-12T06:00:00.000Z",
+						"timeZone": "UTC",
+						"schedule": {
+							"minutes": [
+								0,
+								30
+							],
+							"hours": [
+								16,
+								10
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/HandleChildBehavior')]"
 			]
 		}
 	]
