@@ -1,0 +1,37 @@
+{
+	"name": "trigger1",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "HandleChildBehavior",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"ChildName": "Charlie"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2020-05-12T06:00:00.000Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						0,
+						30
+					],
+					"hours": [
+						16,
+						10
+					]
+				}
+			}
+		}
+	}
+}
