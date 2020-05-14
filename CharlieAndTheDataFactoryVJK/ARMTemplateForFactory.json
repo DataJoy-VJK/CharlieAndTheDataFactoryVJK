@@ -15,7 +15,7 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_LocalSqlCharlieADF'"
 		},
-		"trigger1_properties_HandleChildBehavior_parameters_ChildName": {
+		"trigger2_properties_HandleChildBehavior_parameters_ChildName": {
 			"type": "string",
 			"defaultValue": "Charlie"
 		}
@@ -596,6 +596,36 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2020-05-12T06:00:00.000Z",
+						"timeZone": "UTC",
+						"schedule": {
+							"minutes": [
+								0,
+								30
+							],
+							"hours": [
+								16,
+								10
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/MySelfHostedIR')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -644,12 +674,12 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"name": "[concat(parameters('factoryName'), '/trigger2')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -657,7 +687,7 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"ChildName": "[parameters('trigger1_properties_HandleChildBehavior_parameters_ChildName')]"
+							"ChildName": "[parameters('trigger2_properties_HandleChildBehavior_parameters_ChildName')]"
 						}
 					}
 				],
@@ -666,7 +696,7 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2020-05-12T06:00:00.000Z",
+						"startTime": "2020-05-14T22:00:00.000Z",
 						"timeZone": "UTC",
 						"schedule": {
 							"minutes": [
@@ -674,8 +704,8 @@
 								30
 							],
 							"hours": [
-								16,
-								10
+								13,
+								5
 							]
 						}
 					}

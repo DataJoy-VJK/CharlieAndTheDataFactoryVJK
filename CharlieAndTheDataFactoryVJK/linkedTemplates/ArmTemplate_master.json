@@ -15,7 +15,7 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_LocalSqlCharlieADF'"
 		},
-		"trigger1_properties_HandleChildBehavior_parameters_ChildName": {
+		"trigger2_properties_HandleChildBehavior_parameters_ChildName": {
 			"type": "string",
 			"defaultValue": "Charlie"
 		},
@@ -52,8 +52,8 @@
 					"ls_LocalSqlCharlieADF_connectionString": {
 						"value": "[parameters('ls_LocalSqlCharlieADF_connectionString')]"
 					},
-					"trigger1_properties_HandleChildBehavior_parameters_ChildName": {
-						"value": "[parameters('trigger1_properties_HandleChildBehavior_parameters_ChildName')]"
+					"trigger2_properties_HandleChildBehavior_parameters_ChildName": {
+						"value": "[parameters('trigger2_properties_HandleChildBehavior_parameters_ChildName')]"
 					}
 				}
 			},
