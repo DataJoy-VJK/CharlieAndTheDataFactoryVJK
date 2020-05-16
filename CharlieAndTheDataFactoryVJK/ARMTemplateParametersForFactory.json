@@ -10,9 +10,6 @@
 		},
 		"ls_LocalSqlCharlieADF_connectionString": {
 			"value": ""
-		},
-		"trigger2_properties_HandleChildBehavior_parameters_ChildName": {
-			"value": "Charlie"
 		}
 	}
 }
