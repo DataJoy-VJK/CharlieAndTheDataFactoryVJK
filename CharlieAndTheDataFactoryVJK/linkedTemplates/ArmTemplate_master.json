@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_LocalSqlCharlieADF'"
 		},
+		"trigger1_properties_HandleChildBehavior_parameters_ChildName": {
+			"type": "string",
+			"defaultValue": "Charlie"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -47,6 +51,9 @@
 					},
 					"ls_LocalSqlCharlieADF_connectionString": {
 						"value": "[parameters('ls_LocalSqlCharlieADF_connectionString')]"
+					},
+					"trigger1_properties_HandleChildBehavior_parameters_ChildName": {
+						"value": "[parameters('trigger1_properties_HandleChildBehavior_parameters_ChildName')]"
 					}
 				}
 			},
